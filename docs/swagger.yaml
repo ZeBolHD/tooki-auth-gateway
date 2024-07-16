@@ -1,0 +1,150 @@
+definitions:
+  models.LoginResponse:
+    properties:
+      email:
+        type: string
+      gender:
+        enum:
+        - Male
+        - ' Female'
+        - ' Unknown'
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      token:
+        type: string
+    type: object
+  models.LoginUserDto:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    required:
+    - login
+    - password
+    type: object
+  models.RegisterResponse:
+    properties:
+      banned:
+        type: boolean
+      created_at:
+        example: "2024-03-02"
+        type: string
+      email:
+        example: test@gmail.com
+        type: string
+      id:
+        example: 8cbabbe9-5fff-4dbe-a77e-104bf4e63dbe
+        type: string
+      name:
+        example: Зиновьев Артём
+        type: string
+      role:
+        enum:
+        - User
+        - ' Admin'
+        - ' SuperAdmin'
+        example: USER
+        type: string
+      verified:
+        type: boolean
+    type: object
+  models.RegisterUserDto:
+    properties:
+      age:
+        example: 5
+        type: integer
+      email:
+        description: E
+        example: test@email.com
+        type: string
+      gender:
+        enum:
+        - Male
+        - ' Female'
+        - ' Unknown'
+        example: Female
+        type: string
+      login:
+        example: sw1ft12
+        type: string
+      name:
+        example: Артёмчик Zиновьев
+        type: string
+      password:
+        example: assag23214
+        type: string
+    required:
+    - age
+    - email
+    - gender
+    - login
+    - name
+    - password
+    type: object
+info:
+  contact: {}
+  license:
+    name: Apache 2.0
+  title: Tooki??
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Аутентификация пользователя
+      parameters:
+      - description: Данные для аутентификации
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LoginResponse'
+        "400":
+          description: Неправильные логин или пароль
+      summary: Аутентификация пользователя
+      tags:
+      - Auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Регистрация пользователя
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterUserDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Пользователь зарегистрирован
+          schema:
+            $ref: '#/definitions/models.RegisterResponse'
+        "400":
+          description: Нверные данные
+      summary: Регистрация пользователя
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
